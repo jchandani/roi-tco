@@ -1,5 +1,5 @@
 streamlit
-python-3.11.0
+python-3.12.10
 fpdf
 plotly
 
