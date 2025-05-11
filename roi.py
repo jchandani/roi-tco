@@ -87,12 +87,38 @@ def create_pdf_report(name, email, phone, savings_labor, savings_autonomous, cha
 
     pdf.output("xwam_roi_report.pdf")  #save
 
+def format_variables(**kwargs):
+    """
+    Formats a dictionary of variables into a string with bold keys, similar to the provided format.
+
+    Args:
+        **kwargs: A dictionary of variables.  The keys are variable names,
+                  and the values are their corresponding values.
+
+    Returns:
+        A string with each variable formatted as "**Variable Name:** Value"
+        and separated by newlines.
+    """
+    formatted_string = ""
+    for key, value in kwargs.items():
+        # Capitalize the key and surround it with bold markdown
+        formatted_key = f"<strong>{key.replace('_', ' ').title()}</strong>"  # Replace underscores and title case
+        formatted_string += f"<p>{formatted_key}: {value}</p>"
+    return formatted_string.strip()  # Remove trailing newline
+
+def send_data_to_hubspot2(name, email, phone, weekly_goal, working_days, hours_per_day, mower_width_24ft, mower_width_38ft,
+                        capital_cost_24ft, capital_cost_38ft, operation_type, labor_rate, fuel_consumption_24ft,
+                        fuel_consumption_38ft, overseer_salary, kit_cost, annual_fees):
+    print(email)
+    print(phone)
+    print(name)
+
 # Function to send data to HubSpot
 def send_data_to_hubspot(name, email, phone, weekly_goal, working_days, hours_per_day, mower_width_24ft, mower_width_38ft,
                         capital_cost_24ft, capital_cost_38ft, operation_type, labor_rate, fuel_consumption_24ft,
                         fuel_consumption_38ft, overseer_salary, kit_cost, annual_fees):
     # Replace with your actual HubSpot API key and form ID
-    HUBSPOT_API_KEY = "YOUR_HUBSPOT_API_KEY"  #chage
+    HUBSPOT_API_KEY = st.secrets["hubspot"]["api_key"]  #chage
     HUBSPOT_FORM_ID = "YOUR_HUBSPOT_FORM_ID"  #change
     HUBSPOT_PORTAL_ID = "YOUR_HUBSPOT_PORTAL_ID" #change
 
@@ -101,25 +127,32 @@ def send_data_to_hubspot(name, email, phone, weekly_goal, working_days, hours_pe
         "Content-Type": "application/json",
         "Authorization": f"Bearer {HUBSPOT_API_KEY}"
     }
+
+    my_variables = {
+        "weekly_goal": weekly_goal,
+        "working_days": working_days,
+        "hours_per_day": hours_per_day,
+        "mower_width_24ft": mower_width_24ft,
+        "mower_width_38ft": mower_width_38ft,
+        "capital_cost_24ft": capital_cost_24ft,
+        "capital_cost_38ft": capital_cost_38ft,
+        "operation_type": operation_type,
+        "labor_rate": labor_rate,
+        "fuel_consumption_24ft": fuel_consumption_24ft,
+        "fuel_consumption_38ft": fuel_consumption_38ft,
+        "overseer_salary": overseer_salary,
+        "kit_cost": kit_cost,
+        "annual_fees": annual_fees,
+    }
+
+    formatted_output = format_variables(**my_variables)
+
     data = {
         "properties": {
             "email": email,
             "firstname": name,
             "phone": phone,
-            "weekly_goal": weekly_goal,
-            "working_days": working_days,
-            "hours_per_day": hours_per_day,
-            "mower_width_24ft": mower_width_24ft,
-            "mower_width_38ft": mower_width_38ft,
-            "capital_cost_24ft": capital_cost_24ft,
-            "capital_cost_38ft": capital_cost_38ft,
-            "operation_type": operation_type,
-            "labor_rate": labor_rate,
-            "fuel_consumption_24ft": fuel_consumption_24ft,
-            "fuel_consumption_38ft": fuel_consumption_38ft,
-            "overseer_salary": overseer_salary,
-            "kit_cost": kit_cost,
-            "annual_fees": annual_fees
+            "input_data": formatted_output
         }
     }
     try:
@@ -207,7 +240,7 @@ def main():
                                                 weeks_per_year, capital_cost_38ft, lifespan_years)
         savings_labor = costs_24_labor["total_annual_cost"] - costs_38_labor["total_annual_cost"]
         savings_percentage_labor = (savings_labor / costs_24_labor["total_annual_cost"]) * 100
-        result_text = f"A Trimax mower will provide {savings_percentage_labor:.2f}% increased efficiency/cost savings equating to ${savings_labor:,.2f}."
+        result_text = f"A Trimax 38ft mower will provide <h3>{savings_percentage_labor:.2f}%</h3> increased efficiency/cost savings equating to <b>${savings_labor:,.2f}.</b>"
         if savings_percentage_labor < 0:
             result_text = "Please consider adjusting inputs or contact us for a detailed analysis."
 
@@ -224,7 +257,7 @@ def main():
                                                 weeks_per_year, capital_cost_38ft, lifespan_years, autonomy_cost_38)
         savings_autonomous = costs_24_auto["total_annual_cost"] - costs_38_auto["total_annual_cost"]
         savings_percentage_autonomous = (savings_autonomous / costs_24_auto["total_annual_cost"]) * 100
-        result_text = f"A Trimax mower will provide {savings_percentage_autonomous:.2f}% increased efficiency/cost savings equating to ${savings_autonomous:,.2f}."
+        result_text = f"A Trimax 38ft mower will provide <h3>{savings_percentage_autonomous:.2f}%</h3> increased efficiency/cost savings equating to <b>${savings_autonomous:,.2f}.</b>"
         if savings_percentage_autonomous < 0:
             result_text = "Please consider adjusting inputs or contact us for a detailed analysis."
     
@@ -307,15 +340,16 @@ def main():
             st.session_state.show_user_form = True
         if st.session_state.show_user_form:
             st.subheader("User Information")
-            name = st.text_input("Name")
-            email = st.text_input("Email")
-            phone = st.text_input("Phone")
+            name = st.text_input("Name", value=st.session_state.get("name", ""), key="name")
+            email = st.text_input("Email", value=st.session_state.get("email", ""), key="email")
+            phone = st.text_input("Phone", value=st.session_state.get("phone", ""), key="phone")
+            print(phone)
             if st.button("Submit"):
-                send_data_to_hubspot(name, email, phone)
+                send_data_to_hubspot(st.session_state["name"], st.session_state["email"], st.session_state["phone"], weekly_goal, working_days, hours_per_day, mower_width_24ft, mower_width_38ft, capital_cost_24ft, capital_cost_38ft, operation_type, labor_rate, fuel_consumption_24ft, fuel_consumption_38ft, overseer_salary, kit_cost, annual_fees)
                 st.session_state.form_submitted = True
         
         if st.session_state.form_submitted:
-            st.success("Report generated and ready for download!")
+            st.success("Thanks to reaching Trimax support! We will share detailed report soon to your email address.")
 
 if __name__ == "__main__":
     main()
