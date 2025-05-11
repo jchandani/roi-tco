@@ -1,0 +1,91 @@
+/* General layout */
+body {
+    font-family: "Open Sans", sans-serif;
+    background-color: #ffffff;
+    color: #333;
+}
+
+/* Hide default Streamlit menu and footer */
+#MainMenu, footer, header {
+    visibility: hidden;
+}
+
+/* Trimax-style custom header */
+.custom-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #be1e2d; /* Trimax red */
+    color: white;
+    padding: 0.5rem 2rem;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.custom-header img {
+    height: 40px;
+}
+
+.custom-header .nav {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 0.95rem;
+}
+
+.custom-header .nav a {
+    color: white;
+    text-decoration: none;
+}
+
+.custom-header .nav a:hover {
+    text-decoration: underline;
+}
+
+.results-section {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between; /* Align items horizontally */
+    align-items: flex-start; /* Align items to the start (top) */
+}
+.results-section > div {
+    width: 48%; /* Each result container takes up half the width */
+}
+
+/* Trimax-style footer */
+.custom-footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+    padding: 1rem;
+    font-size: 0.9rem;
+    z-index: 9999;
+}
+
+/* Page padding to prevent overlap */
+.stApp {
+    padding-top: 80px;
+    padding-bottom: 60px;
+}
+
+/* Button styling */
+.stButton > button {
+    background-color: #be1e2d;
+    color: white;
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    font-weight: bold;
+    border: none;
+}
+
+.stButton > button:hover {
+    background-color: #a31a27;
+}

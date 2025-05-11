@@ -1,0 +1,5 @@
+streamlit
+python-3.11.0
+fpdf
+plotly
+
