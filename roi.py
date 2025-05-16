@@ -191,7 +191,7 @@ def main():
             mower_width_24ft = st.number_input("Current Mower Width (ft)", value=24, min_value=1, max_value=38, step=1)
             capital_cost_24ft = st.slider("Capital Cost Of Current Machine ($)", min_value=50000, max_value=300000,
                                             value=138000, step=5000)
-            cutting_speed_24ft = st.slider("Cutting Speed of Current Machine (mph)", min_value=2, max_value=5,
+            cutting_speed_24ft = st.slider("Cutting Speed of Current Machine (mph)", min_value=2.0, max_value=5.0,
                                             value=4.25, step=0.25)
             capital_cost_38ft = 175000
             #st.slider("Capital Cost for 38ft Mower ($)", min_value=100000, max_value=500000,value=175000, step=5000)
