@@ -180,16 +180,19 @@ def main():
             hours_per_day = st.number_input("Hours per Day", value=7, min_value=1, max_value=24, step=1)
             hours_per_week_per_mower = working_days * hours_per_day
             weeks_per_year = 52
-            lifespan_years = st.number_input("Mower Life", value=7, min_value=1, max_value=15, step=1)
+            lifespan_years = st.number_input("Mower Life (years)", value=7, min_value=1, max_value=15, step=1)
 
             # --- Mower Width Selection ---
             
             mower_width_38ft = 37
 
             # --- Capital Costs ---
+            
+            mower_width_24ft = st.number_input("Current Mower Width (ft)", value=24, min_value=1, max_value=38, step=1)
             capital_cost_24ft = st.slider("Capital Cost Of Current Machine ($)", min_value=50000, max_value=300000,
                                             value=138000, step=5000)
-            mower_width_24ft = st.number_input("Current Mower Width", value=24, min_value=1, max_value=38, step=1)
+            cutting_speed_24ft = st.slider("Cutting Speed of Current Machine (mph)", min_value=2, max_value=5,
+                                            value=4.25, step=0.25)
             capital_cost_38ft = 175000
             #st.slider("Capital Cost for 38ft Mower ($)", min_value=100000, max_value=500000,value=175000, step=5000)
         
@@ -222,7 +225,7 @@ def main():
 
     # --- Calculations ---
     # 24 ft Mower Calculations
-    total_hours_24ft = calculate_hours_needed(weekly_goal, mower_width_24ft)
+    total_hours_24ft = calculate_hours_needed(weekly_goal, mower_width_24ft,cutting_speed_24ft)
     num_mowers_24ft = calculate_num_mowers(total_hours_24ft, hours_per_week_per_mower)
 
     # 38 ft Mower Calculations
