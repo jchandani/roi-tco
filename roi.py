@@ -183,14 +183,15 @@ def main():
             lifespan_years = st.number_input("Mower Life", value=7, min_value=1, max_value=15, step=1)
 
             # --- Mower Width Selection ---
-            mower_width_24ft = 23
+            
             mower_width_38ft = 37
 
             # --- Capital Costs ---
-            capital_cost_24ft = st.slider("Capital Cost for 24ft Mower ($)", min_value=50000, max_value=300000,
+            capital_cost_24ft = st.slider("Capital Cost Of Current Machine ($)", min_value=50000, max_value=300000,
                                             value=138000, step=5000)
-            capital_cost_38ft = st.slider("Capital Cost for 38ft Mower ($)", min_value=100000, max_value=500000,
-                                            value=175000, step=5000)
+            mower_width_24ft = st.number_input("Current Mower Width", value=24, min_value=1, max_value=38, step=1)
+            capital_cost_38ft = 175000
+            #st.slider("Capital Cost for 38ft Mower ($)", min_value=100000, max_value=500000,value=175000, step=5000)
         
         with col2:
             st.header("Operation Details")
